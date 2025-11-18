@@ -1,12 +1,19 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HeaderComponent } from './components/header/header';
+import { ProductGrid } from './components/product-grid/product-grid';
+import { Cart } from './components/cart/cart';
+import { PRODUCTS } from './data/products';
+import { Product } from './models/product';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [CommonModule, HeaderComponent, ProductGrid, Cart],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
 export class App {
-  protected readonly title = signal('modastyle-shop');
+  title = 'ModaStyle';
+  products: Product[] = PRODUCTS;
 }
