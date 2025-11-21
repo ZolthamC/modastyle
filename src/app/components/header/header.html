@@ -2,17 +2,48 @@
   <div class="container mx-auto px-4 py-4">
     <div class="flex justify-between items-center">
       <div class="flex items-center space-x-8">
-        <h1 class="text-2xl font-bold text-gray-900">ModaStyle</h1>
+        <h1 class="text-2xl font-bold text-gray-900">
+          <a (click)="router.navigate(['/'])" class="cursor-pointer hover:text-gray-700">ModaStyle</a>
+        </h1>
         <nav class="hidden md:flex space-x-6">
-          <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Mujer</a>
-          <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Hombre</a>
-          <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Niños</a>
-          <a href="#" class="text-gray-600 hover:text-gray-900 font-medium">Ofertas</a>
+          <a class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer">Mujer</a>
+          <a class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer">Hombre</a>
+          <a class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer">Niños</a>
+          <a class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer">Ofertas</a>
         </nav>
       </div>
       
       <div class="flex items-center space-x-4">
-        <button class="p-2 text-gray-600 hover:text-gray-900">
+        <!-- User menu -->
+        <div class="flex items-center space-x-2" *ngIf="currentUser; else authButtons">
+          <span class="text-gray-700">Hola, {{ currentUser.name }}</span>
+          <button 
+            (click)="logout()"
+            class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
+
+        <ng-template #authButtons>
+          <div class="flex items-center space-x-2">
+            <button 
+              (click)="router.navigate(['/login'])"
+              class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer"
+            >
+              Login
+            </button>
+            <span class="text-gray-300">|</span>
+            <button 
+              (click)="router.navigate(['/register'])"
+              class="text-gray-600 hover:text-gray-900 font-medium cursor-pointer"
+            >
+              Register
+            </button>
+          </div>
+        </ng-template>
+
+        <button class="p-2 text-gray-600 hover:text-gray-900 cursor-pointer">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>
@@ -20,7 +51,7 @@
         
         <button 
           (click)="openCart()"
-          class="relative p-2 text-gray-600 hover:text-gray-900"
+          class="relative p-2 text-gray-600 hover:text-gray-900 cursor-pointer"
         >
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />

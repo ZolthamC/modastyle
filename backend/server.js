@@ -5,25 +5,24 @@ const morgan = require('morgan');
 const connectDB = require('./config/database');
 require('dotenv').config();
 
-// Conectar a la base de datos
 connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middlewares
 app.use(helmet());
 app.use(cors());
-app.use(morgan('combined'));
+app.use(morgan('dev'));
 app.use(express.json());
 
 // Importar rutas
 const productRoutes = require('./routes/Products');
+const authRoutes = require('./routes/auth');
 
 // Usar rutas
 app.use('/api/products', productRoutes);
+app.use('/api/auth', authRoutes);
 
-// Ruta de health check
 app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'OK', 
@@ -32,7 +31,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Manejo de errores
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ 
@@ -41,10 +39,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Ruta 404 (manejo de rutas no encontradas)
-// Evitar pasar '*' directamente a app.use() porque algunas versiones de path-to-regexp
-// lanzan errores al parsearlo. Usamos un middleware sin path para capturar rutas
-// que no coinciden con ninguna ruta anterior.
+// Captura rutas no encontradas — no usar '*' porque algunas versiones de
+// path-to-regexp lanzan un PathError al parsearlo. Usamos un middleware
+// sin path para manejar 404.
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
