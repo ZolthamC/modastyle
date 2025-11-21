@@ -1,1 +1,35 @@
-<p>product-grid works!</p>
+<div>
+  <!-- Filtros por categoría -->
+  <div class="flex flex-wrap gap-2 mb-8 justify-center">
+    <button
+      (click)="selectedCategory = 'todos'"
+      [class]="selectedCategory === 'todos' 
+        ? 'px-4 py-2 rounded-full bg-black text-white font-medium' 
+        : 'px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300'"
+    >
+      Todos
+    </button>
+    <button
+      *ngFor="let category of categories"
+      (click)="selectedCategory = category"
+      [class]="selectedCategory === category 
+        ? 'px-4 py-2 rounded-full bg-black text-white font-medium' 
+        : 'px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300'"
+    >
+      {{ category | titlecase }}
+    </button>
+  </div>
+
+  <!-- Grid de productos -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+    <app-product-card 
+      *ngFor="let product of filteredProducts"
+      [product]="product"
+    ></app-product-card>
+  </div>
+
+  <!-- Mensaje si no hay productos -->
+  <div *ngIf="filteredProducts.length === 0" class="text-center py-12">
+    <p class="text-gray-500 text-lg">No se encontraron productos en esta categoría.</p>
+  </div>
+</div>

@@ -9,7 +9,10 @@ export class CartService {
   private isCartOpen = false;
 
   addToCart(product: Product, size: string, color: string): void {
-    const itemId = `${product.id}-${size}-${color}`;
+    // Si no se selecciona color, usar el primero disponible
+    const selectedColor = color || product.colors[0];
+    const itemId = `${product.id}-${size}-${selectedColor}`;
+    
     const existingItem = this.cartItems.find(item => item.id === itemId);
 
     if (existingItem) {
@@ -19,7 +22,7 @@ export class CartService {
         id: itemId,
         product,
         size,
-        color,
+        color: selectedColor,
         quantity: 1
       });
     }
@@ -30,7 +33,10 @@ export class CartService {
   }
 
   updateQuantity(itemId: string, quantity: number): void {
-    if (quantity < 1) return;
+    if (quantity < 1) {
+      this.removeFromCart(itemId);
+      return;
+    }
     
     const item = this.cartItems.find(item => item.id === itemId);
     if (item) {
@@ -60,5 +66,12 @@ export class CartService {
 
   setCartOpen(isOpen: boolean): void {
     this.isCartOpen = isOpen;
+  }
+
+  // Nuevo método para verificar si un producto ya está en el carrito
+  isProductInCart(product: Product, size: string, color: string): boolean {
+    const selectedColor = color || product.colors[0];
+    const itemId = `${product.id}-${size}-${selectedColor}`;
+    return this.cartItems.some(item => item.id === itemId);
   }
 }
