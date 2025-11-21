@@ -18,7 +18,7 @@ app.use(morgan('combined'));
 app.use(express.json());
 
 // Importar rutas
-const productRoutes = require('./routes/products');
+const productRoutes = require('./routes/Products');
 
 // Usar rutas
 app.use('/api/products', productRoutes);

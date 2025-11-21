@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: modastyle-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - modastyle-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=modastyle
+
+  backend:
+    image: node:20
+    container_name: modastyle-backend
+    working_dir: /usr/src/app/backend
+    volumes:
+      - ./backend:/usr/src/app/backend
+      - /usr/src/app/backend/node_modules
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/modastyle
+    depends_on:
+      - mongodb
+    command: sh -c "cd /usr/src/app/backend && npm install --silent && npm run dev"
+
+volumes:
+  modastyle-data:
