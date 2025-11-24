@@ -24,7 +24,6 @@ router.get('/', async (req, res) => {
     const products = await Product.find(query)
       .limit(limit * 1)
       .skip((page - 1) * limit)
-      .sort({ createdAt: -1 });
 
     const total = await Product.countDocuments(query);
 
@@ -67,6 +66,65 @@ router.post('/', async (req, res) => {
     res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+});
+router.get('/', async (req, res) => {
+  try {
+    console.log('🔍 [DEBUG] Iniciando consulta de productos...');
+    
+    const { category, featured, page = 1, limit = 10 } = req.query;
+    console.log('📋 [DEBUG] Query params:', req.query);
+
+    let query = { active: true };
+    console.log('🔍 [DEBUG] Query base:', query);
+
+    // Filtrar por categoría
+    if (category && category !== 'todos') {
+      query.category = category;
+    }
+
+    // Filtrar productos destacados
+    if (featured) {
+      query.featured = featured === 'true';
+    }
+
+    console.log('🔍 [DEBUG] Query final:', query);
+
+    // TEST: Consulta sin filtros primero
+    console.log('📦 [DEBUG] Probando consulta sin filtros...');
+    const allProducts = await Product.find({});
+    console.log('📦 [DEBUG] Total productos en DB:', allProducts.length);
+    
+    if (allProducts.length > 0) {
+      console.log('🔍 [DEBUG] Primer producto:', {
+        name: allProducts[0].name,
+        active: allProducts[0].active,
+        category: allProducts[0].category
+      });
+    }
+
+    // Consulta con filtros
+    console.log('🔍 [DEBUG] Ejecutando consulta con filtros...');
+    const products = await Product.find(query)
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+      // .sort({ createdAt: -1 }); // ← Temporalmente comentado
+
+    console.log('✅ [DEBUG] Productos encontrados:', products.length);
+
+    const total = await Product.countDocuments(query);
+    console.log('📊 [DEBUG] Total documentos:', total);
+
+    res.json({
+      products,
+      totalPages: Math.ceil(total / limit),
+      currentPage: page,
+      total
+    });
+
+  } catch (error) {
+    console.error('❌ [DEBUG] Error en ruta products:', error);
+    res.status(500).json({ error: error.message });
   }
 });
 

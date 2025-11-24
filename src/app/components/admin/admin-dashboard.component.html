@@ -1,0 +1,138 @@
+<div class="min-h-screen bg-gray-50 p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Dashboard Administrativo</h1>
+      <p class="text-gray-600 mt-2">Gestión completa de ModaStyle</p>
+    </div>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="text-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
+      <p class="mt-4 text-gray-600">Cargando estadísticas...</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Products -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-3 bg-blue-100 rounded-lg">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2M4 13h2m8-8V4a1 1 0 00-1-1h-2a1 1 0 00-1 1v1M9 7h6"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">Total Productos</p>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.totalProducts }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Orders -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-3 bg-green-100 rounded-lg">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">Total Órdenes</p>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.totalOrders }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Users -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-3 bg-purple-100 rounded-lg">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">Total Usuarios</p>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.totalUsers }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Revenue -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+        <div class="flex items-center">
+          <div class="p-3 bg-yellow-100 rounded-lg">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v1m0 6v1m0-1v1m6-13a2 2 0 11-4 0 2 2 0 014 0zM4 13a2 2 0 100 4 2 2 0 000-4z"></path>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm font-medium text-gray-600">Ingresos Totales</p>
+            <p class="text-2xl font-semibold text-gray-900">${{ stats.totalRevenue | number:'1.2-2' }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <a [routerLink]="['/admin/products']" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Gestión de Productos</h3>
+            <p class="text-gray-600 mt-1">Agregar, editar y eliminar productos</p>
+          </div>
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+      </a>
+
+      <a [routerLink]="['/admin/orders']" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Gestión de Órdenes</h3>
+            <p class="text-gray-600 mt-1">Ver y gestionar todas las órdenes</p>
+          </div>
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+      </a>
+
+      <a [routerLink]="['/admin/users']" class="bg-white rounded-lg shadow-sm p-6 border border-gray-200 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">Gestión de Usuarios</h3>
+            <p class="text-gray-600 mt-1">Administrar usuarios del sistema</p>
+          </div>
+          <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </div>
+      </a>
+    </div>
+
+    <!-- Low Stock Alert -->
+    <div *ngIf="stats.lowStockProducts.length > 0" class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
+      <div class="p-6 border-b border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900">Productos con Stock Bajo</h3>
+      </div>
+      <div class="p-6">
+        <div *ngFor="let product of stats.lowStockProducts" class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+          <div class="flex items-center space-x-3">
+            <img [src]="product.image" [alt]="product.name" class="w-10 h-10 object-cover rounded">
+            <div>
+              <p class="font-medium text-sm">{{ product.name }}</p>
+              <p class="text-xs text-gray-500">Stock: {{ product.stock }}</p>
+            </div>
+          </div>
+          <span class="inline-block px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">
+            Stock Bajo
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
