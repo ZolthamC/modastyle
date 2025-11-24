@@ -1,0 +1,3 @@
+# Ver usuarios en la base de datos
+docker exec modastyle-mongodb mongosh -u admin -p password123 --authenticationDatabase admin --eval "use modastyle; db.users.find().pretty()"
+# Ver usuarios en la base de datos

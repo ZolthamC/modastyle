@@ -1,27 +1,52 @@
 <div>
-  <!-- Filtros por categoría -->
-  <div class="flex flex-wrap gap-2 mb-8 justify-center">
-    <button
-      (click)="selectedCategory = 'todos'"
-      [class]="selectedCategory === 'todos' 
-        ? 'px-4 py-2 rounded-full bg-black text-white font-medium' 
-        : 'px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300'"
-    >
-      Todos
-    </button>
-    <button
-      *ngFor="let category of categories"
-      (click)="selectedCategory = category"
-      [class]="selectedCategory === category 
-        ? 'px-4 py-2 rounded-full bg-black text-white font-medium' 
-        : 'px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300'"
-    >
-      {{ category | titlecase }}
-    </button>
+  <!-- Filtros y controles -->
+  <div class="mb-8">
+    <!-- Filtros por categoría -->
+    <div class="flex flex-wrap gap-2 mb-4 justify-center">
+      <button
+        (click)="onCategoryFilter('todos')"
+        [class]="selectedCategory === 'todos' 
+          ? 'px-4 py-2 rounded-full bg-black text-white font-medium' 
+          : 'px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300'"
+      >
+        Todos
+      </button>
+      <button
+        *ngFor="let category of categories.slice(1)"
+        (click)="onCategoryFilter(category)"
+        [class]="selectedCategory === category 
+          ? 'px-4 py-2 rounded-full bg-black text-white font-medium' 
+          : 'px-4 py-2 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300'"
+      >
+        {{ category | titlecase }}
+      </button>
+    </div>
+
+    <!-- Controles de filtros activos -->
+    <div *ngIf="selectedCategory !== 'todos' || searchTerm" class="text-center mb-4">
+      <div class="inline-flex items-center gap-4 bg-gray-100 px-4 py-2 rounded-full">
+        <span class="text-sm text-gray-700">
+          Filtros activos: 
+          <span *ngIf="selectedCategory !== 'todos'" class="font-medium">{{ selectedCategory }}</span>
+          <span *ngIf="searchTerm" class="font-medium">"{{ searchTerm }}"</span>
+        </span>
+        <button 
+          (click)="clearFilters()"
+          class="text-gray-500 hover:text-gray-700 text-sm"
+        >
+          Limpiar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
   </div>
 
   <!-- Grid de productos -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+  <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     <app-product-card 
       *ngFor="let product of filteredProducts"
       [product]="product"
@@ -29,7 +54,13 @@
   </div>
 
   <!-- Mensaje si no hay productos -->
-  <div *ngIf="filteredProducts.length === 0" class="text-center py-12">
-    <p class="text-gray-500 text-lg">No se encontraron productos en esta categoría.</p>
+  <div *ngIf="!loading && filteredProducts.length === 0" class="text-center py-12">
+    <p class="text-gray-500 text-lg mb-4">No se encontraron productos con los filtros aplicados.</p>
+    <button 
+      (click)="clearFilters()"
+      class="bg-black text-white px-6 py-2 rounded hover:bg-gray-800"
+    >
+      Mostrar todos los productos
+    </button>
   </div>
 </div>

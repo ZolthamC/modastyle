@@ -1,24 +1,29 @@
-import { Component } from '@angular/core';
+import { Component, inject, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartService } from '../../services/cart';
 import { AuthService, User } from '../../services/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './header.html',
   styleUrls: ['./header.scss']
 })
 export class HeaderComponent {
-  currentUser: User | null = null;
+  private cartService = inject(CartService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(
-    private cartService: CartService,
-    private authService: AuthService,
-    public router: Router
-  ) {
+  @Output() search = new EventEmitter<string>();
+  @Output() categoryFilter = new EventEmitter<string>();
+
+  currentUser: User | null = null;
+  searchTerm: string = '';
+
+  constructor() {
     this.authService.currentUser$.subscribe(user => {
       this.currentUser = user;
     });
@@ -34,6 +39,25 @@ export class HeaderComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  goToLogin(): void {
+    this.router.navigate(['/login']);
+  }
+
+  goToRegister(): void {
+    this.router.navigate(['/register']);
+  }
+
+  goToHome(): void {
     this.router.navigate(['/']);
+  }
+
+  onSearch(): void {
+    this.search.emit(this.searchTerm);
+  }
+
+  filterByCategory(category: string): void {
+    this.categoryFilter.emit(category);
   }
 }

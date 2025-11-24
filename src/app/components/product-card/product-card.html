@@ -1,13 +1,36 @@
-<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-  <img 
-    [src]="product.image" 
-    [alt]="product.name"
-    class="w-full h-64 object-cover"
-  />
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+  <!-- Imagen del producto -->
+  <div class="relative">
+    <img 
+      [src]="product.image" 
+      [alt]="product.name"
+      class="w-full h-64 object-cover transition-transform duration-300 hover:scale-105"
+      (load)="imageLoaded = true"
+    />
+    <!-- Loading skeleton para imagen -->
+    <div *ngIf="!imageLoaded" class="absolute inset-0 bg-gray-200 animate-pulse"></div>
+    
+    <!-- Badge de featured - Solo si existe y es true -->
+    <div *ngIf="product.featured" class="absolute top-2 left-2">
+      <span class="bg-red-500 text-white px-2 py-1 text-xs font-medium rounded">Destacado</span>
+    </div>
+    
+    <!-- Badge de stock bajo -->
+    <div *ngIf="product.stock < 5" class="absolute top-2 right-2">
+      <span class="bg-orange-500 text-white px-2 py-1 text-xs font-medium rounded">Últimas unidades</span>
+    </div>
+  </div>
+  
   <div class="p-4">
-    <h3 class="text-lg font-semibold text-gray-800">{{ product.name }}</h3>
-    <p class="text-gray-600 text-sm mt-1">{{ product.description }}</p>
-    <p class="text-xl font-bold text-gray-900 mt-2">${{ product.price }}</p>
+    <!-- Información del producto -->
+    <h3 class="text-lg font-semibold text-gray-800 line-clamp-2">{{ product.name }}</h3>
+    <p class="text-gray-600 text-sm mt-1 line-clamp-2">{{ product.description }}</p>
+    
+    <!-- Precio -->
+    <div class="flex items-center justify-between mt-2">
+      <p class="text-xl font-bold text-gray-900">${{ product.price }}</p>
+      <p class="text-sm text-gray-500">{{ product.stock }} disponibles</p>
+    </div>
     
     <!-- Selector de talla -->
     <div class="mt-3">
@@ -17,8 +40,8 @@
           *ngFor="let size of product.sizes"
           (click)="selectedSize = size"
           [class]="selectedSize === size 
-            ? 'px-3 py-1 text-sm border-2 rounded bg-black text-white border-black' 
-            : 'px-3 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300 hover:border-gray-400'"
+            ? 'px-3 py-1 text-sm border-2 rounded bg-black text-white border-black transition-colors' 
+            : 'px-3 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300 hover:border-gray-400 transition-colors'"
         >
           {{ size }}
         </button>
@@ -33,20 +56,23 @@
           *ngFor="let color of product.colors"
           (click)="selectedColor = color"
           [class]="selectedColor === color 
-            ? 'px-3 py-1 text-sm border-2 rounded bg-black text-white border-black' 
-            : 'px-3 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300 hover:border-gray-400'"
+            ? 'px-3 py-1 text-sm border-2 rounded bg-black text-white border-black transition-colors' 
+            : 'px-3 py-1 text-sm border rounded bg-white text-gray-700 border-gray-300 hover:border-gray-400 transition-colors'"
         >
           {{ color }}
         </button>
       </div>
     </div>
 
+    <!-- Botón agregar al carrito -->
     <button 
       (click)="onAddToCart()"
-      [disabled]="!selectedSize"
-      class="mt-4 w-full bg-black text-white py-2 rounded hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed font-medium transition-colors"
+      [disabled]="!selectedSize || product.stock === 0"
+      [class]="!selectedSize || product.stock === 0 
+        ? 'mt-4 w-full bg-gray-400 text-white py-2 rounded font-medium cursor-not-allowed transition-colors' 
+        : 'mt-4 w-full bg-black text-white py-2 rounded hover:bg-gray-800 font-medium transition-colors'"
     >
-      Agregar al Carrito
+      {{ product.stock === 0 ? 'Sin Stock' : (selectedSize ? 'Agregar al Carrito' : 'Selecciona Talla') }}
     </button>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product';
 import { CartService } from '../../services/cart';
@@ -11,14 +11,14 @@ import { CartService } from '../../services/cart';
   styleUrls: ['./product-card.scss']
 })
 export class ProductCardComponent {
+  private cartService = inject(CartService);
+
   @Input() product!: Product;
   selectedSize: string = '';
   selectedColor: string = '';
-
-  constructor(private cartService: CartService) {}
+  imageLoaded: boolean = false;
 
   ngOnInit(): void {
-    // Seleccionar automáticamente el primer color disponible
     if (this.product.colors.length > 0) {
       this.selectedColor = this.product.colors[0];
     }
@@ -28,13 +28,20 @@ export class ProductCardComponent {
     if (this.selectedSize) {
       this.cartService.addToCart(this.product, this.selectedSize, this.selectedColor);
       
-      // Opcional: Mostrar feedback visual
-      console.log('Producto agregado al carrito:', this.product.name);
+      // Feedback visual
+      const button = document.activeElement as HTMLElement;
+      if (button) {
+        button.textContent = '✓ Agregado';
+        button.classList.add('bg-green-600');
+        setTimeout(() => {
+          button.textContent = 'Agregar al Carrito';
+          button.classList.remove('bg-green-600');
+        }, 1000);
+      }
     }
   }
 
-  // Método para verificar si el producto puede ser agregado al carrito
   canAddToCart(): boolean {
-    return !!this.selectedSize;
+    return !!this.selectedSize && this.product.stock > 0;
   }
 }

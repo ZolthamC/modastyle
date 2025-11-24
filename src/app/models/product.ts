@@ -8,6 +8,7 @@ export interface Product {
   image: string;
   stock: number;
   description: string;
+  featured?: boolean; // ✅ Agregar esta línea
 }
 
 export interface CartItem {
