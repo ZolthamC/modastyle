@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Product } from '../../models/product';
 import { CartService } from '../../services/cart';
@@ -10,7 +10,7 @@ import { CartService } from '../../services/cart';
   templateUrl: './product-card.html',
   styleUrls: ['./product-card.scss']
 })
-export class ProductCardComponent {
+export class ProductCardComponent implements OnInit {
   private cartService = inject(CartService);
 
   @Input() product!: Product;
@@ -28,7 +28,6 @@ export class ProductCardComponent {
     if (this.selectedSize) {
       this.cartService.addToCart(this.product, this.selectedSize, this.selectedColor);
       
-      // Feedback visual
       const button = document.activeElement as HTMLElement;
       if (button) {
         button.textContent = '✓ Agregado';

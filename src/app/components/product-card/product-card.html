@@ -10,11 +10,6 @@
     <!-- Loading skeleton para imagen -->
     <div *ngIf="!imageLoaded" class="absolute inset-0 bg-gray-200 animate-pulse"></div>
     
-    <!-- Badge de featured - Solo si existe y es true -->
-    <div *ngIf="product.featured" class="absolute top-2 left-2">
-      <span class="bg-red-500 text-white px-2 py-1 text-xs font-medium rounded">Destacado</span>
-    </div>
-    
     <!-- Badge de stock bajo -->
     <div *ngIf="product.stock < 5" class="absolute top-2 right-2">
       <span class="bg-orange-500 text-white px-2 py-1 text-xs font-medium rounded">Últimas unidades</span>

@@ -1,0 +1,186 @@
+<div class="product-form-container">
+  <div class="form-header">
+    <h1>{{ isEditMode ? '✏️ Editar Producto' : '➕ Crear Nuevo Producto' }}</h1>
+    <button class="btn-secondary" (click)="onCancel()">← Volver</button>
+  </div>
+
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>{{ isEditMode ? 'Cargando producto...' : 'Creando producto...' }}</p>
+  </div>
+
+  <form *ngIf="!loading" (ngSubmit)="onSubmit()" class="product-form">
+    
+    <!-- Información Básica -->
+    <div class="form-section">
+      <h2>Información Básica</h2>
+      
+      <div class="form-group">
+        <label for="name">Nombre del Producto *</label>
+        <input 
+          type="text" 
+          id="name" 
+          [(ngModel)]="product.name" 
+          name="name"
+          required
+          class="form-input"
+          placeholder="Ej: Camiseta Básica Negra"
+        >
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="price">Precio *</label>
+          <input 
+            type="number" 
+            id="price" 
+            [(ngModel)]="product.price" 
+            name="price"
+            step="0.01"
+            min="0"
+            required
+            class="form-input"
+            placeholder="0.00"
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="stock">Stock *</label>
+          <input 
+            type="number" 
+            id="stock" 
+            [(ngModel)]="product.stock" 
+            name="stock"
+            min="0"
+            required
+            class="form-input"
+            placeholder="0"
+          >
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Categoría *</label>
+        <select 
+          id="category" 
+          [(ngModel)]="product.category" 
+          name="category"
+          required
+          class="form-select"
+        >
+          <option value="">Selecciona una categoría</option>
+          <option *ngFor="let category of categories" [value]="category">
+            {{ category | titlecase }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descripción</label>
+        <textarea 
+          id="description" 
+          [(ngModel)]="product.description" 
+          name="description"
+          rows="4"
+          class="form-textarea"
+          placeholder="Describe el producto..."
+        ></textarea>
+      </div>
+    </div>
+
+    <!-- Imagen -->
+    <div class="form-section">
+      <h2>Imagen del Producto</h2>
+      <div class="form-group">
+        <label for="image">URL de la Imagen *</label>
+        <input 
+          type="url" 
+          id="image" 
+          [(ngModel)]="product.image" 
+          name="image"
+          required
+          class="form-input"
+          placeholder="https://ejemplo.com/imagen.jpg"
+        >
+        <small class="help-text">Usa una URL de imagen de Unsplash o similar</small>
+      </div>
+
+      <!-- Vista previa de imagen -->
+      <div *ngIf="product.image" class="image-preview">
+        <h3>Vista Previa:</h3>
+        <img [src]="product.image" [alt]="product.name" class="preview-image">
+      </div>
+    </div>
+
+    <!-- Tallas Disponibles -->
+    <div class="form-section">
+      <h2>Tallas Disponibles</h2>
+      <div class="checkbox-grid">
+        <label *ngFor="let size of availableSizes" class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [value]="size"
+            [checked]="isSizeSelected(size)"
+            (change)="onSizeChange(size, $event)"
+          >
+          <span class="checkmark"></span>
+          {{ size }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Colores Disponibles -->
+    <div class="form-section">
+      <h2>Colores Disponibles</h2>
+      <div class="checkbox-grid">
+        <label *ngFor="let color of availableColors" class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [value]="color"
+            [checked]="isColorSelected(color)"
+            (change)="onColorChange(color, $event)"
+          >
+          <span class="checkmark"></span>
+          <span class="color-name">{{ color | titlecase }}</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Opciones Adicionales -->
+    <div class="form-section">
+      <h2>Opciones Adicionales</h2>
+      <div class="form-options">
+        <label class="checkbox-option">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="product.featured" 
+            name="featured"
+          >
+          <span class="checkmark"></span>
+          Producto destacado
+        </label>
+
+        <label class="checkbox-option">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="product.active" 
+            name="active"
+            [checked]="product.active !== false"
+          >
+          <span class="checkmark"></span>
+          Producto activo
+        </label>
+      </div>
+    </div>
+
+    <!-- Botones de Acción -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">
+        Cancelar
+      </button>
+      <button type="submit" class="btn-submit" [disabled]="loading">
+        {{ isEditMode ? '💾 Actualizar Producto' : '➕ Crear Producto' }}
+      </button>
+    </div>
+  </form>
+</div>

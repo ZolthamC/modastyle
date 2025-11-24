@@ -1,0 +1,53 @@
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <nav class="admin-sidebar" [class.collapsed]="isSidebarCollapsed">
+    <div class="sidebar-header">
+      <h2>ModaStyle Admin</h2>
+      <button class="toggle-btn" (click)="toggleSidebar()">☰</button>
+    </div>
+    
+    <ul class="sidebar-menu">
+      <li>
+        <a routerLink="/admin/dashboard" routerLinkActive="active" class="menu-item">
+          <span class="menu-icon">📊</span>
+          <span class="menu-text">Dashboard</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/products" routerLinkActive="active" class="menu-item">
+          <span class="menu-icon">🛍️</span>
+          <span class="menu-text">Productos</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/orders" routerLinkActive="active" class="menu-item">
+          <span class="menu-icon">📦</span>
+          <span class="menu-text">Pedidos</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/admin/users" routerLinkActive="active" class="menu-item">
+          <span class="menu-icon">👥</span>
+          <span class="menu-text">Usuarios</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="admin-content">
+    <header class="admin-header">
+      <div class="header-left">
+        <h1>{{ currentPageTitle }}</h1>
+      </div>
+      <div class="header-right">
+        <span class="admin-name">Administrador</span>
+        <button class="logout-btn" (click)="logout()">🚪 Cerrar Sesión</button>
+      </div>
+    </header>
+    
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,110 @@
+<div class="products-admin-container">
+  <!-- Header -->
+  <div class="admin-header">
+    <h1>Gestión de Productos</h1>
+    <button class="btn-primary" routerLink="/admin/products/new">
+    ➕ Nuevo Producto
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Buscar productos..." 
+        (input)="onSearch($any($event.target).value)"
+        class="search-input"
+        [value]="searchTerm"
+      >
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="category-filter">
+      <select 
+        (change)="onCategoryFilter($any($event.target).value)" 
+        class="filter-select"
+        [value]="selectedCategory"
+      >
+        <option value="">Todas las categorías</option>
+        <option *ngFor="let category of getCategories()" [value]="category">
+          {{ category }}
+        </option>
+      </select>
+    </div>
+
+    <div class="results-count">
+      {{ filteredProducts.length }} de {{ products.length }} productos
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Cargando productos...</p>
+  </div>
+
+  <!-- Products Table -->
+  <div *ngIf="!loading" class="products-table-container">
+    <div *ngIf="filteredProducts.length === 0 && products.length > 0" class="no-results">
+      <p>🔍 No se encontraron productos con los filtros aplicados</p>
+    </div>
+
+    <table *ngIf="filteredProducts.length > 0" class="products-table">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Categoría</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts" class="product-row">
+          <td class="product-info">
+            <img [src]="product.image" [alt]="product.name" class="product-image">
+            <div class="product-details">
+              <strong>{{ product.name }}</strong>
+              <p class="product-desc">{{ product.description }}</p>
+            </div>
+          </td>
+          <td>
+            <span class="category-badge">{{ product.category }}</span>
+          </td>
+          <td class="price">${{ product.price | number:'1.2-2' }}</td>
+          <td>
+            <span [class]="'stock-badge ' + getStockClass(product)">
+              {{ product.stock }} unidades
+            </span>
+          </td>
+          <td>
+            <span [class]="'status-badge ' + getStatusClass(product)">
+              {{ getProductStatus(product) }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="btn-edit" [routerLink]="['/admin/products/edit', product._id]">
+              ✏️ Editar
+            </button>
+            <button class="btn-toggle" (click)="toggleProductStatus(product)">
+              {{ isProductActive(product) ? '❌ Desactivar' : '✅ Activar' }}
+            </button>
+            <button class="btn-delete" (click)="deleteProduct(product._id)">
+              🗑️ Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Empty State cuando no hay productos -->
+    <div *ngIf="!loading && products.length === 0" class="empty-state">
+      <p>📭 No hay productos en la base de datos</p>
+      <button class="btn-primary" routerLink="/admin/products/new">
+        ➕ Crear primer producto
+      </button>
+    </div>
+  </div>
+</div>

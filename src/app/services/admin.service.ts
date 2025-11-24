@@ -13,11 +13,9 @@ export class AdminService {
   private http = inject(HttpClient);
   private apiUrl = `${environment.apiUrl}`;
 
-  // ✅ CORREGIDO: Manejar correctamente la respuesta del API
   getProducts(): Observable<Product[]> {
     return this.http.get<any>(`${this.apiUrl}/products?limit=100`).pipe(
       map(response => {
-        // Tu API devuelve { products: [], totalPages: X, currentPage: X, total: X }
         console.log('📊 Admin - Respuesta API:', response);
         
         if (response.products && Array.isArray(response.products)) {
@@ -35,15 +33,20 @@ export class AdminService {
     );
   }
 
-  createProduct(product: Omit<Product, 'id' | '_id'>): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/products`, product);
+  createProduct(product: Omit<Product, '_id' | 'id'>): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/products`, product);
   }
 
-  updateProduct(id: string, product: Partial<Product>): Observable<Product> {
-    return this.http.put<Product>(`${this.apiUrl}/products/${id}`, product);
+  updateProduct(id: string, product: Partial<Product>): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/products/${id}`, product);
   }
 
-  deleteProduct(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/products/${id}`);
+  deleteProduct(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/products/${id}`);
+  }
+
+  // Eliminación permanente (opcional)
+  deleteProductPermanent(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/products/${id}/permanent`);
   }
 }

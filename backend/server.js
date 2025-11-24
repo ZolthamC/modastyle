@@ -6,6 +6,8 @@ const morgan = require('morgan');
 const connectDB = require('./config/database');
 require('dotenv').config();
 
+
+
 // Conectar a la base de datos
 connectDB();
 
@@ -61,4 +63,24 @@ app.listen(PORT, () => {
   console.log(`🚀 ModaStyle API running on port ${PORT}`);
   console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
   console.log(`🛒 Products endpoint: http://localhost:${PORT}/api/products`);
+});
+
+// Debug endpoint temporal
+app.get('/api/debug/all-products', async (req, res) => {
+  try {
+    const Product = require('./models/Product');
+    const allProducts = await Product.find({});
+    
+    console.log('🔍 DEBUG ALL - Total productos:', allProducts.length);
+    
+    res.json({
+      success: true,
+      total: allProducts.length,
+      products: allProducts,
+      rawResponse: allProducts
+    });
+  } catch (error) {
+    console.error('DEBUG ALL Error:', error);
+    res.status(500).json({ error: error.message });
+  }
 });

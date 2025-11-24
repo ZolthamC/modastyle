@@ -16,7 +16,9 @@ import { Product } from '../../models/product';
 export class HomeComponent implements OnInit {
   products: Product[] = [];
   searchTerm: string = '';
-  selectedCategory: string = '';
+  selectedCategory: string = 'todos';
+  isLoading: boolean = true;
+  error: string = '';
 
   constructor(private productService: ProductService) {}
 
@@ -25,24 +27,40 @@ export class HomeComponent implements OnInit {
   }
 
   loadProducts(): void {
+    this.isLoading = true;
+    this.error = '';
+    
     this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        console.log('🏠 Home: Productos cargados', products.length);
+      next: (response: any) => {
+        if (Array.isArray(response)) {
+          this.products = response;
+        } else if (response.data && Array.isArray(response.data)) {
+          this.products = response.data;
+        } else if (response.products && Array.isArray(response.products)) {
+          this.products = response.products;
+        } else {
+          this.products = [];
+        }
+        
+        this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading products:', error);
+        this.error = 'Error al cargar los productos';
+        this.isLoading = false;
+        this.products = [];
       }
     });
   }
 
   onSearch(searchTerm: string): void {
     this.searchTerm = searchTerm;
-    console.log('Búsqueda:', searchTerm);
   }
 
   onCategoryFilter(category: string): void {
     this.selectedCategory = category;
-    console.log('Categoría:', category);
+  }
+
+  retryLoad(): void {
+    this.loadProducts();
   }
 }

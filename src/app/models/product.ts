@@ -1,5 +1,9 @@
 export interface Product {
-  id: number;
+  // IDs
+  _id?: string;        // ID de MongoDB
+  id?: number;         // ID local (opcional)
+  
+  // Información básica
   name: string;
   price: number;
   category: string;
@@ -8,9 +12,18 @@ export interface Product {
   image: string;
   stock: number;
   description: string;
+  
+  // Propiedades de estado
   featured?: boolean;
+  active?: boolean;
+  
+  // Timestamps
+  createdAt?: string;
+  updatedAt?: string;
+  
+  // Versión de MongoDB
+  __v?: number;
 }
-
 export interface CartItem {
   id: string;
   product: Product;
