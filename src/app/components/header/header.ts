@@ -40,6 +40,10 @@ export class HeaderComponent {
   logout(): void {
     this.authService.logout();
   }
+  
+    goToProfile(): void {
+    this.router.navigate(['/profile']);
+  }
 
   goToLogin(): void {
     this.router.navigate(['/login']);

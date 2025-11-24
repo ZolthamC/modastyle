@@ -1,0 +1,22 @@
+:host {
+  display: block;
+}
+
+// Estilos para los inputs con formato de tarjeta
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+select:focus {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+// Animación suave para los pasos
+.step-transition {
+  transition: all 0.3s ease-in-out;
+}
+
+// Estilos para el resumen sticky
+.sticky {
+  position: sticky;
+  top: 1rem;
+}

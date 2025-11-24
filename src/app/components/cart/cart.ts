@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CartService } from '../../services/cart';
 import { CartItem } from '../../models/product';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart',
@@ -11,7 +12,11 @@ import { CartItem } from '../../models/product';
   styleUrls: ['./cart.scss']
 })
 export class CartComponent {
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private router: Router
+  ) {}
+
 
   get isOpen(): boolean {
     return this.cartService.getCartOpen();
@@ -37,7 +42,11 @@ export class CartComponent {
     this.cartService.updateQuantity(itemId, quantity);
   }
 
-  // Nuevo método para obtener el color seleccionado
+  proceedToCheckout(): void {    if (this.cartItems.length > 0) {
+      this.closeCart();
+      this.router.navigate(['/checkout']);
+    }
+     }
   getSelectedColor(item: CartItem): string {
     return item.color || item.product.colors[0];
   }

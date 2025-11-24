@@ -8,7 +8,7 @@ export interface Product {
   image: string;
   stock: number;
   description: string;
-  featured?: boolean; // ✅ Agregar esta línea
+  featured?: boolean;
 }
 
 export interface CartItem {
@@ -18,3 +18,5 @@ export interface CartItem {
   color: string;
   quantity: number;
 }
+
+export * from './order.interface';
